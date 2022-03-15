@@ -15,12 +15,13 @@ for i in range(0, p.get_device_count()):
         if not device["maxInputChannels"] > 0:
             devices.append(device)
 
-for device in devices: 
+for device in devices:
     print(f"{devices.index(device)}", device["name"])
 
 #Get device info
 defaultframes = 1136
-device_info = p.get_device_info_by_index(devices[(int(input("Enter index of an audio device above: ").strip()))]["index"])
+device_info = p.get_device_info_by_index(
+    devices[(int(input("Enter index of an audio device above: ").strip()))]["index"])
 rate = int(device_info["defaultSampleRate"])
 
 #create connection
@@ -36,12 +37,12 @@ clientSocket.send(data)
 channelcount = device_info["maxInputChannels"] if (
     device_info["maxOutputChannels"] < device_info["maxInputChannels"]) else device_info["maxOutputChannels"]
 inputStream = p.open(format=pyaudio.paFloat32,
-                channels=channelcount,
-                rate = rate,
-                input=True,
-                frames_per_buffer=defaultframes,
-                input_device_index=device_info["index"],
-                as_loopback=True)
+                     channels=channelcount,
+                     rate=rate,
+                     input=True,
+                     frames_per_buffer=defaultframes,
+                     input_device_index=device_info["index"],
+                     as_loopback=True)
 
 while True:
     temp = inputStream.read(9088)
